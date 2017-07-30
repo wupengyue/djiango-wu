@@ -1,0 +1,5 @@
+# build products...
+*.py[co]
+build
+AUTHORS.TXT
+app_node/migrations/*
