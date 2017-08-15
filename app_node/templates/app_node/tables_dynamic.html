@@ -58,12 +58,12 @@
                             {% for node in content %}
                             <tr>
                                 <td>{{ node.hostname }}</td>
-                                <td>{{ node.ip_addr }}</td>
+                                <td class="ip">{{ node.ip_addr }}</td>
                                 <td>{{ node.add_time }}</td>
                                 <td>{{ node.last_update_time }}</td>
                                 <td>Connected</td>
                                 <td>
-                                    <button type="button" id="server_update_{{server.id}}"
+                                    <button type="button" id="server_update_{{node.ip_addr}}"
                                             class="btn btn-xs btn-primary">Refresh
                                     </button>
                                 </td>
@@ -102,34 +102,15 @@
     /*
         *update server info
     */
-    $("table tbody tr td button[id^='server_update']").click(function(){
-       var ip_addr = $(this).attr('IP Address'); 
-       console.log(ip_addr)
-    //    var ip_addr = id_val.split('_')[2]; 
-       var data = {"ip_addr":ip_addr};
-        data = JSON.stringify(data);
-        var url = "/node/cmdb/";
-        $.get(url,{data:data},function(msg){
-           ajax_callback(msg);
-         });
-    });
-
-    /*
-    *ajax get callback
-    */
-    function ajax_callback(msg){
-        var msg =  $.parseJSON(msg);
-        var index = layer.alert(msg, { //layer控件提示信息
-            skin: 'layui-layer-molv' //样式类名
-        },function(){
-            if (msg == '成功'){
-                window.location="/node/text/";
-            }
-            else{
-               layer.close(index)
-            }
+    $(document).ready(function(){
+        $("table tbody tr td button[id^='server_update']").click(function(){
+            var ip_addr = $(this).parent().parent().find(".ip").text();
+            var url = "/node/cmdb/";
+            $.get(url, function(data,status){
+                alert("Data: " + data + "\nStatus: " + status);
+            });
         });
-}
+    });
 
 </script>
 {% endblock javascripts %}

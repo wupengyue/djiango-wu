@@ -2,4 +2,10 @@
 *.py[co]
 build
 AUTHORS.TXT
-app_node/migrations/*
+.DS_Store
+.idea/
+app_node/migrations/000*
+app_node/static/vendors/
+app_temple/
+
+

@@ -3,13 +3,6 @@
 > app_node is a server manager platform
 
 
-
-
-
-
-
-
-
 ###Tips ###
 >we can use proxy to download pypi packages, i.e.:
  ```sh
