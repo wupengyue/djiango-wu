@@ -1,9 +1,13 @@
 # build products...
 *.py[co]
 build
+*.db.sqlite3
+*.log
 AUTHORS.TXT
 .DS_Store
 .idea/
+.vscode
+.vscode/
 app_node/migrations/000*
 app_node/static/vendors/
 app_temple/

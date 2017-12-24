@@ -1,0 +1,238 @@
+{% extends "base/base_site.html" %}
+
+{% block title %}Host Info{% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+<link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="right_col" role="main">
+    <div class="">
+        <div class="clearfix"></div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-expanded="false">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="close-link">
+                                    <i class="fa fa-close"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap"
+                               cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>VCPUs</th>
+                                <th>IP</th>
+                                <th>DiskTotal GB</th>
+                                <th>DiskUsed GB</th>
+                                <th>Mem</th>
+                                <th>MemFree</th>
+                                <th>Tenant</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for host in contents %}
+                            <tr>
+                                <td class="ip">{{ host.Name }}</td>
+                                <td>{{ host.VCPUs }}</td>
+                                <td>{{ host.IP }}</td>
+                                <td class="disk_total">
+                                    <table>
+                                        <tbody>
+                                        {% for key,value in host.Disk_total.items %}
+                                        <tr></tr>
+                                        <div class="x_content">
+                                            <div class="widget_summary">
+                                                <div class="w_left w_10">
+                                                    <span>{{key}}&nbsp;</span>
+                                                </div>
+
+                                                <div class=" w_50">
+                                                    <span>&nbsp;{{value}}GB</span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        {% endfor%}
+                                        </tbody>
+
+                                    </table>
+
+                                </td>
+                                </td>
+                                <td class="disk_used">
+                                    <table>
+                                        {% for key,value in host.Disk_Used.items %}
+                                        <div class="x_content">
+                                            <div class="widget_summary">
+                                                <div class="w_left w_25">
+                                                    <span>{{key}}&nbsp;</span>
+                                                </div>
+                                                <div class="w_center w_55">
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-green" role="progressbar"
+                                                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                                             style="width: {{value}}%;">
+                                                            <span class="sr-only">{{value}}% Complete</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="w_left w_20">
+                                                    <span>&nbsp;&nbsp;{{value}}%</span>
+                                                </div>
+                                            </div>
+
+                                        {% endfor%}
+                                        </div>
+                                    </table>
+
+                                </td>
+
+                                <td class="ip">{{ host.Mem }}</td>
+                                <td class="ip">{{ host.MemFree }}</td>
+                                <td>
+                                    <form method="post" data-parsley-validate>
+                                            {% csrf_token %}
+
+                                        <div class="tenant_{{host.IP}}">
+                                            <div id="tenant">
+                                            </div>
+                                            <label id="asigned_to_{{host.IP}}">{{host.tenant}}</label><br/>
+                                            <button id="tenant_update_{{host.IP}}" class="btn btn-primary"
+                                                    type="button">Edit
+                                            </button>
+                                            <button id="reset_{{host.IP}}" class="btn btn-primary" type="reset">reset
+                                            </button>
+                                            <button id="submit_{{host.IP}}" type="submit" class="btn btn-success">Submit
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %} {% block javascripts %} {{ block.super }}
+<!-- Datatables -->
+<script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/static/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="/static/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="/static/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="/static/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+<script src="/static/vendors/jszip/dist/jszip.min.js"></script>
+<script src="/static/vendors/pdfmake/build/pdfmake.min.js"></script>
+<script src="/static/vendors/pdfmake/build/vfs_fonts.js"></script>
+<script src="/static/js/datatables/jquery.dataTables.min.js"></script>
+<!--<script src="/static/js/jquery/jquery-3.2.1.min.js"></script>-->
+<script>
+    /*
+        *update hosts info
+    */
+        $(document).ready(function () {
+            $("table tbody tr td button[id^='tenant_update_']").click(function () {
+                bt_id = $(this).attr('id').split("_");
+                host_ip = bt_id[bt_id.length - 1];
+
+                if ($(this).parent().find('input:not("button")').length == 0) {
+                    $(this).before('<label id="asigned_' + host_ip + '">Assign To:&nbsp;</label><br/><input required="required" class="form - control col - md - 7 col - xs - 12"><br/>')
+                    $(this).before("<br/>")
+                } else {
+                    $(this).parent().find('input:not("button")').show()
+                    $(this).parent().find('label').show()
+
+                }
+
+            });
+        });
+
+    
+    $(document).ready(function () {
+
+        $("table tbody tr td button[id^='reset_']").click(function () {
+            bt_id = $(this).attr('id').split("_");
+            host_ip = bt_id[bt_id.length - 1];
+
+            if ($(this).parent().find('input:not("button")').length != 0) {
+                $(this).parent().find('input:not("button")').hide()
+                $(this).parent().find('asigned_' + host_ip).hide()
+                $(this).parent().find("#form - control col - md - 7 col - xs - 12").hide();
+
+            }
+
+        });
+    });
+
+
+        $(document).ready(function () {
+            $("table tbody tr td button[id^='submit_']").click(function () {
+
+                if ($(this).parent().find('label').is(":visible")) {
+                    bt_id = $(this).attr('id');
+                    bt_id_splited = bt_id.split("_")
+                    host_ip = bt_id_splited[bt_id_splited.length - 1];
+                    tenant = $(this).parent().find('input').val()
+                    var url = "/tenants/";
+                    // var html = '';
+                    $.post(url, { "ip": host_ip, "tenant": tenant },
+                        function (data, status) {
+                            // html += '<div><h6>' + data['ip']
+                            //     + ':</h6><p> ' + data['tenant']
+                            //     + '</p></div>';
+                            // alert(html)
+                        });
+
+                }
+            });
+        });
+
+
+
+
+
+
+
+
+
+
+</script> {% endblock javascripts %}

@@ -1,0 +1,1 @@
+# jenkins_manager is application for manage content in jenkins 
