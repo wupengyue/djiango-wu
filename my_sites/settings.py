@@ -24,7 +24,7 @@ SECRET_KEY = '8*md2t)o**67@*yhc(d=f@j95kl(dnf^rmm4s00$-mh_vurb2b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.11', '192.168.1.12', '10.*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.11', '192.168.1.12', '10.*', '10.74.26.114']
 
 # Application definition
 
@@ -114,6 +114,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
 
@@ -133,8 +134,8 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {  # 日志格式
         'verbose': {  # 详细格式
-            'format': '[%(filename)s:%(lineno)s %(funcName)1s()] %(levelname)s %(asctime)s %(message)s'
-            # 'format': '[%(filename)s:%(lineno)s %(funcName)1s()] %(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+             'format': '[%(filename)s:%(lineno)s %(funcName)1s()] %(levelname)s %(asctime)s %(message)s'
+            #'format': '[%(filename)s:%(lineno)s %(funcName)1s()] %(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
         'simple': {  # 简单格式
             'format': '%(levelname)s %(message)s'
@@ -198,4 +199,4 @@ LOGGING = {
     }
 }
 
-LOGIN_URL = '/login.html'
+LOGIN_REDIRECT_URL = '/test'

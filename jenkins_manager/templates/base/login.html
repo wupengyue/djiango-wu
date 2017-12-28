@@ -18,17 +18,33 @@
     <div class="login_wrapper">
         <div class="animate form login_form">
             <section class="login_content">
-                <form action="/login/" method="post">
+                {% if form.errors %}
+                <P>Your username and password didn't match. Please try again.</P>
+                {% endif %}
+
+                {% if next %}
+                {% if user.is_authenticated %}
+                <p>Your account doesn't have access to this page. To proceed,
+                    please login with an account that has access.</p>
+                {% else %}
+                <p>Please login to see this page.</p>
+                {% endif %}
+                {% endif %}
+
+
+                <!--<form action ='/login?next={{request.path}}' method="post">-->
+                <form method="post" action="/login/">
                     {% csrf_token %}
-                    <h1>Login Form</h1>
                     <div>
-                        <input type="text" class="form-control" placeholder="Username" required=""/>
+                        User Name: {{ form.username}}
                     </div>
                     <div>
-                        <input type="password" class="form-control" placeholder="Password" required=""/>
+                        Password: {{ form.password}}
                     </div>
+
                     <div>
-                        <a class="btn btn-default submit" href="index.html">Log in</a>
+                        <input type="submit" value="login"/>
+                        <input type="hidden" name="next" value="{{ next }}"/>
                         <a class="reset_pass" href="#">Lost your password?</a>
                     </div>
 
@@ -50,6 +66,7 @@
         <div id="register" class="animate form registration_form">
             <section class="login_content">
                 <form>
+                    {% csrf_token %}
                     <h1>Create Account</h1>
                     <div>
                         <input type="text" class="form-control" placeholder="Username" required=""/>

@@ -112,6 +112,7 @@ class Runner(object):
 
         if refresh:
             os.system('rm -rf ' + self.out_path + '*')
+            os.system('export ANSIBLE_HOST_KEY_CHECKING=False')
             cmd = shlex.split("ansible -u %s -i %s -m setup --tree %s all " %
                               (self.opts['become_user'], self.host_file, self.out_path))
             # cmd = shlex.split("ansible  -i %s -m setup  -tree %s all " %
@@ -123,16 +124,11 @@ class Runner(object):
             output, err = self.set_ret.communicate()
             if err:
                 raise AssertionError('generate ansible output failed:' + str(err))
-
-        cmd = shlex.split("ansible-cmdb -t ./jenkins_manager/cmdber/tpl/json.tpl -i %s %s " %
-                          (self.host_file, self.out_path))
-
-        output, err = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
-        output = output.decode('utf8').replace("'", '"')
-        # logger.debug("output is :" + output)
-        if err:
-            raise AssertionError('generate ansible output failed:' + str(err))
-        hosts_info = self.parse_setup_data(json.loads(output))
+        hosts_json_path = './jenkins_manager/cmdber/tpl/hosts.json'
+        os.system("ansible-cmdb -t ./jenkins_manager/cmdber/tpl/json.tpl -i %s %s > %s " %
+                  (self.host_file, self.out_path, hosts_json_path))
+        hosts_info = self.parse_setup_data(json.load(open(hosts_json_path)))
+        logger.debug("hosts_info is : " + str(hosts_info))
         return hosts_info
 
     def gen_overview(self, endpoint=None):

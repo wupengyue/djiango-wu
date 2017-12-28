@@ -1,16 +1,20 @@
 import json
+import time
 import requests
+import logging
+import pdb
 
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import loader
+from django.contrib import auth
 from jenkins_manager.lib.ansible_runner import Runner
 from jenkins_manager.lib.parseconfig import yaml_loader
-import logging
 from .models import Server, get_tenant, update_tenant, gen_inventory
 from django.contrib.auth.decorators import login_required
+from .forms import UserForm
 
 log = logging.getLogger(__name__)
 config = yaml_loader('jenkins_manager/config.yml')
@@ -18,23 +22,37 @@ runner = Runner()
 
 
 # Create your views here.
-@login_required
+@login_required(login_url='login')
 def index(request):
     context = {}
     template = loader.get_template('base/index.html')
     return HttpResponse(template.render(context, request))
 
 
-@login_required
+def logout(request):
+    return HttpResponse('Welcome,  <a href="/logout/" trarget="_blank"> logout</a>')
+
+
 def login(request):
-    import pdb
-    pdb.set_trace()
+    form = UserForm(request.POST)
+    log.debug("request.method is :" + request.method)
 
-    return render_to_response('base/login.html')
-    # return HttpResponse(template.render(context, request))
+    if request.method == 'POST':
+        if form.is_valid():
+            username = request.POST.get('username', '')
+            password = request.POST.get('password', '')
+            log.debug("username is :" + username)
+            log.debug("password is :" + password)
+            user = auth.authenticate(username=username, password=password)
+            if user and user.is_active:
+                auth.login(request, user)
+                return render(request, 'base/servers.html')
+            else:
+                form.add_error('password', 'username and password not match!')
+    return render(request, 'base/login.html', {'form': form})
 
 
-@login_required
+# @login_required
 def servers(request):
     contents = []
     path = 'http://10.74.27.239:8080/computer/api/json'
@@ -53,20 +71,20 @@ def servers(request):
     return render(request, "base/servers.html", {'contents': contents})
 
 
-@login_required
+# @login_required
 def add_server(request):
     new_server = Server.objects.create(name="ops.ipcdn.cisco.com", ip="10.74.26.114")
     return HttpResponse(new_server.name)
 
 
-@login_required
+# @login_required
 def del_server(request):
     server = Server.objects.filter(name="ops.ipcdn.cisco.com")
     del_server = server.delete()
     return HttpResponse(del_server)
 
 
-@login_required
+# @login_required
 def tenants(request):
     ip = ""
     tenant = ""
@@ -86,7 +104,7 @@ def tenants(request):
     return JsonResponse(message)
 
 
-@login_required
+# @login_required
 def hosts(request):
     # show server manager by ansible db
 
@@ -117,7 +135,7 @@ def hosts(request):
     return render(request, "base/hosts.html", {'contents': hosts})
 
 
-@login_required
+# @login_required
 def general_html(request):
     context = {}
     # The template to be loaded as per my_sites.
@@ -135,7 +153,7 @@ def test(request):
     return JsonResponse(msg)
 
 
-@login_required
+# @login_required
 def cmdb(request):
     overview = runner.gen_overview()
 

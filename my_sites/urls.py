@@ -17,15 +17,13 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin*', admin.site.urls),
 
     # url(r'^app_temple', include('app_temple.urls')),
 
     # # app_node/ -> Genetelella UI and resources
     # url(r'^app_node', include('app_node.urls')),
     # include  auth app's urls module
-    url(r'^users/', include('django.contrib.auth.urls')),
     # default url to jenkins_manager
     url(r'', include('jenkins_manager.urls'))
-
 ]
