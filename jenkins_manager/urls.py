@@ -17,7 +17,7 @@ urlpatterns = [
     url(r'tenants', views.tenants, name='tenants'),
     url(r'add_server', views.add_server, name='add_server'),
     url(r'del_server', views.del_server, name='del_server'),
-    url(r'^login*', views.login, name='login'),
+    url(r'login', views.login, name='login'),
     url(r'', views.hosts, name='hosts'),
 
     # The home page

@@ -135,7 +135,6 @@ LOGGING = {
     'formatters': {  # 日志格式
         'verbose': {  # 详细格式
              'format': '[%(filename)s:%(lineno)s %(funcName)1s()] %(levelname)s %(asctime)s %(message)s'
-            #'format': '[%(filename)s:%(lineno)s %(funcName)1s()] %(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
         'simple': {  # 简单格式
             'format': '%(levelname)s %(message)s'
@@ -199,4 +198,6 @@ LOGGING = {
     }
 }
 
-LOGIN_REDIRECT_URL = '/test'
+LOGIN_URL = '/login/'
+# LOGIN_URL = '/login/'
+# LOGIN_REDIRECT_URL = '/user/accounts/'

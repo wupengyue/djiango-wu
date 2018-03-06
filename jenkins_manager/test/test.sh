@@ -16,7 +16,7 @@ setenforce 0
 
 old_omd_core_rpm="omd-core-3.5.3-b21.x86_64.rpm"
 old_omd_salt_rpm="omd-os-salt-3.5.1-b8.x86_64.rpm"
-OMD_PKG_URL='http://10.74.27.239:8080/view/OMD_3.6.1_release/job/OMD_3.6.1_openmd_build/lastSuccessfulBuild/artifact/salt/.build/omd-core-3.6.1-b18.tgz'
+OMD_PKG_URL='http://10.74.27.239:8080/view/OMD_3.6.1_release/job/OMD_3.6.1_openmd_build/lastSuccessfulBuild/artifact/salt/.build/omd-core-3.6.1-b20.tgz'
 OMD_PKG_tgz=`echo ${OMD_PKG_URL} |awk -F '/'  '{print $NF}'`
 new_omd_core_rpm=`echo ${OMD_PKG_tgz} |awk -F '.tgz'  '{print $1}'`.x86_64.rpm
 echo "new_omd_core_rpm is: $new_omd_core_rpm"
@@ -43,7 +43,7 @@ ssh root@${repo_ip}<<'ENDSSH'
 ENDSSH
 
 
-OMD_SALT_URL='http://engci-maven-master.cisco.com/artifactory/open-cdn-release/omd-os-salt-3.6.1-b6.tgz'
+OMD_SALT_URL='http://engci-maven-master.cisco.com/artifactory/open-cdn-release/omd-os-salt-3.6.1-b8.tgz'
 OMD_SALT_tgz=`echo ${OMD_SALT_URL} |awk -F '/'  '{print $NF}'`
 new_omd_salt_rpm=`echo ${OMD_SALT_tgz} |awk -F '.tgz'  '{print $1}'`.x86_64.rpm
 echo "new_omd_salt_rpm is: $new_omd_salt_rpm"
@@ -121,6 +121,7 @@ echo "prepare ac8 testbed finished"
 
 echo "==========================step 3 do salt script to config salt-minion=========================="
 updateSaltCfg ${TESTBED_ID} ops
+dockercmd $ct_salt_master "salt '*ops*'    state.highstate"
 
 
 echo "==========================step 4  prepare AC9 testbed=========================="

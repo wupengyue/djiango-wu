@@ -22,7 +22,6 @@ runner = Runner()
 
 
 # Create your views here.
-@login_required(login_url='login')
 def index(request):
     context = {}
     template = loader.get_template('base/index.html')
@@ -31,6 +30,11 @@ def index(request):
 
 def logout(request):
     return HttpResponse('Welcome,  <a href="/logout/" trarget="_blank"> logout</a>')
+
+
+def login(request):
+    return render_to_response('base/login.html')
+    # return HttpResponse(template.render(context, request))
 
 
 def login(request):
